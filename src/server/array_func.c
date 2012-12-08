@@ -905,20 +905,13 @@ int array_request_parse_token(
       start_l = strtol(str, NULL, 10);
       end_l = strtol(idx, NULL, 10);
       }
+    *(--idx) = '-';
     }
   /* index/rindex found different '-' characters, this can't be a good range */
   else
     {
     start_l = -1;
     end_l = -1;
-    }
-
-  /* restore the string so this function is non-destructive to the token */
-  if ((idx != NULL) &&
-      (idx == ridx + 1))
-    {
-    idx--;
-    *idx = '-';
     }
 
   /* make sure the start or end of the range is not out of the range for 

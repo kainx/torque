@@ -2220,7 +2220,10 @@ job *svr_find_job(
     different = TRUE;
 
     if (comp == NULL)
+      {
+      if (dash) *dash = '-';
       return(NULL);
+      }
     }
   else
     {
@@ -2279,6 +2282,7 @@ job *svr_find_job(
   if (different)
     free(comp);
 
+  if (dash) *dash = '-';
   return(pj);  /* may be NULL */
   }   /* END svr_find_job() */
 
