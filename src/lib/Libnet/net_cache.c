@@ -84,6 +84,7 @@
 #include <string.h>
 #include <stdio.h>
 
+#include "trq_mutex.h"
 #include "net_cache.h"
 #include "resizable_array.h"
 #include "hash_table.h"

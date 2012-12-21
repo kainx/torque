@@ -2,6 +2,7 @@
 #include <pbs_config.h> /* needed for PTHREAD_MUTEX_ERRORCHECK */
 
 #include <pthread.h> /* pthread_mutex_* */
+#include "trq_mutex.h"
 #include "lib_net.h"
 #include "../Libutils/u_lock_ctl.h" /* lock_conn_table, unlock_conn_table */
 #include "pbs_error.h" /* PBSE_*, FALSE */

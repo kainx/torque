@@ -22,6 +22,7 @@
 #ifdef HAVE_CONFIG_H
 # include <pbs_config.h>
 #endif
+#include "trq_mutex.h"
 
 #include <stdlib.h>
 #include <string.h>
@@ -190,14 +191,14 @@ drmaa_get_contact(
   char *errmsg, size_t errlen
 )
   {
-  pthread_mutex_lock(&drmaa_session_mutex);
+  pthread_mutex_lock(drmaa_session_mutex);
 
   if (drmaa_session != NULL)
     strlcpy(contact, drmaa_session->contact, contact_len);
   else
     strlcpy(contact, "localhost", contact_len);
 
-  pthread_mutex_unlock(&drmaa_session_mutex);
+  pthread_mutex_unlock(drmaa_session_mutex);
 
   return DRMAA_ERRNO_SUCCESS;
   }

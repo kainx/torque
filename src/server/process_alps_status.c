@@ -84,6 +84,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
+#include "trq_mutex.h"
 #include "dynamic_string.h"
 #include "pbs_nodes.h"
 #include "attribute.h"

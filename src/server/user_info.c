@@ -79,6 +79,7 @@
 
 #include <stdio.h>
 #include <errno.h>
+#include "trq_mutex.h"
 #include "user_info.h"
 #include "svrfunc.h"
 #include "array.h"

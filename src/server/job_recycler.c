@@ -80,6 +80,7 @@
 
 #include <stdlib.h>
 
+#include "trq_mutex.h"
 #include "pbs_job.h"
 #include "utils.h"
 #include "threadpool.h"

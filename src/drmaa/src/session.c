@@ -22,6 +22,7 @@
 #ifdef HAVE_CONFIG_H
 # include <pbs_config.h>
 #endif
+#include "trq_mutex.h"
 
 #include <stdlib.h>
 #include <string.h>
@@ -39,7 +40,7 @@ __attribute__((unused))
 = "$Id: session.c,v 1.12 2006/09/05 13:50:00 ciesnik Exp $";
 #endif
 
-pthread_mutex_t drmaa_session_mutex = PTHREAD_MUTEX_INITIALIZER;
+pthread_mutex_t *drmaa_session_mutex = NULL;
 drmaa_session_t *drmaa_session = NULL;
 
 int
@@ -47,7 +48,13 @@ drmaa_init(const char *contact, char *errmsg, size_t errlen)
   {
   int rc = DRMAA_ERRNO_SUCCESS;
   DEBUG(("-> drmaa_init(%s)", contact));
-  pthread_mutex_lock(&drmaa_session_mutex);
+  if (!drmaa_session_mutex)
+    {
+    drmaa_session_mutex = (pthread_mutex_t *) malloc(sizeof(pthread_mutex_t));
+    pthread_mutex_init(drmaa_session_mutex, NULL);
+    }
+
+  pthread_mutex_lock(drmaa_session_mutex);
 
   if (drmaa_session != NULL)
     SET_DRMAA_ERROR(rc = DRMAA_ERRNO_ALREADY_ACTIVE_SESSION);
@@ -55,7 +62,7 @@ drmaa_init(const char *contact, char *errmsg, size_t errlen)
   if (!rc)
     rc = drmaa_create(&drmaa_session, contact, errmsg, errlen);
 
-  pthread_mutex_unlock(&drmaa_session_mutex);
+  pthread_mutex_unlock(drmaa_session_mutex);
 
   DEBUG(("<- drmaa_init =%d", rc));
 
@@ -68,18 +75,18 @@ drmaa_exit(char *errmsg, size_t errlen)
   {
   int rc = DRMAA_ERRNO_SUCCESS;
   DEBUG(("-> drmaa_exit"));
-  pthread_mutex_lock(&drmaa_session_mutex);
+  pthread_mutex_lock(drmaa_session_mutex);
 
   if (drmaa_session == NULL)
     {
-    pthread_mutex_unlock(&drmaa_session_mutex);
+    pthread_mutex_unlock(drmaa_session_mutex);
     RAISE_DRMAA(DRMAA_ERRNO_NO_ACTIVE_SESSION);
     }
 
   rc = drmaa_destroy(drmaa_session, errmsg, errlen);
 
   drmaa_session = NULL;
-  pthread_mutex_unlock(&drmaa_session_mutex);
+  pthread_mutex_unlock(drmaa_session_mutex);
   DEBUG(("<- drmaa_exit =%d", rc));
   return rc;
   }

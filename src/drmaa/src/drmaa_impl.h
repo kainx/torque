@@ -25,6 +25,7 @@
 #ifdef HAVE_CONFIG_H
 # include <pbs_config.h>
 #endif
+#include "trq_mutex.h"
 
 #include <sys/types.h>
 
@@ -46,7 +47,7 @@ typedef struct drmaa_session_s drmaa_session_t;
 typedef struct drmaa_job_s drmaa_job_t;
 
 /** Mutex for accessing @ref drmaa_session global variable. */
-extern pthread_mutex_t drmaa_session_mutex;
+extern pthread_mutex_t *drmaa_session_mutex;
 extern drmaa_session_t *drmaa_session;
 
 
@@ -254,14 +255,14 @@ drmaa_replace(char *input, const char *placeholder, const char *value);
 
 
 #define GET_DRMAA_SESSION( session ) do{            \
-    pthread_mutex_lock( &drmaa_session_mutex );       \
+    pthread_mutex_lock( drmaa_session_mutex );       \
     if( drmaa_session == NULL )                       \
       {                                                \
-      pthread_mutex_unlock( &drmaa_session_mutex );   \
+      pthread_mutex_unlock( drmaa_session_mutex );   \
       RAISE_DRMAA( DRMAA_ERRNO_NO_ACTIVE_SESSION );   \
       }                                                \
     session = drmaa_session;                          \
-    pthread_mutex_unlock( &drmaa_session_mutex );     \
+    pthread_mutex_unlock( drmaa_session_mutex );     \
     }while(0)
 
 #define RELEASE_DRMAA_SESSION( session ) /* nothing */

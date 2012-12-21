@@ -79,6 +79,7 @@
 
 #include <stdio.h>
 
+#include "trq_mutex.h"
 #include "resizable_array.h"
 #include "pbs_nodes.h"
 #include "login_nodes.h"

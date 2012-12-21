@@ -22,6 +22,7 @@
 #ifdef HAVE_CONFIG_H
 # include <pbs_config.h>
 #endif
+#include "trq_mutex.h"
 
 #include <assert.h>
 #include <limits.h>

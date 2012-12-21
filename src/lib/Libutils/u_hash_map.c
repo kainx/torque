@@ -85,6 +85,7 @@
 #include <string.h>
 #include <stdio.h>
 
+#include "trq_mutex.h"
 #include "hash_map.h"
 #include "pbs_error.h"
 #include "log.h"

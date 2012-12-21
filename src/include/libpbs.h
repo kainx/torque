@@ -98,6 +98,7 @@
 #endif /* _MEMORY_H */
 #include <pthread.h>
 
+#include "trq_mutex.h"
 #include "pbs_ifl.h"
 #include "list_link.h"
 #include "pbs_error.h"

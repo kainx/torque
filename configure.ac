@@ -2085,6 +2085,81 @@ AC_SUBST(drmaadocdir)
 
 dnl
 dnl  ######################################################################
+dnl  TORQUE thread mutex wrapper support
+dnl
+AC_MSG_CHECKING([whether to enable debugging wrappers for POSIX mutexes])
+AC_ARG_ENABLE([mutex-wrap],
+   AC_HELP_STRING([--enable-mutex-wrap],
+                  [wrap all POSIX mutexes for debugging @<:@default=no@:>@]),
+                  [enable_mutex_wrap=$enableval], [enable_mutex_wrap=no])
+if test "x$enable_mutex_wrap" = "xyes" ; then
+    mutex_wrap_status="yes"
+    AC_DEFINE([TRQ_MUTEX_WRAPPERS], 1, [Define to wrap all POSIX mutexes for debugging purposes])
+    AC_ARG_ENABLE([mutex-wrap-debug],
+       AC_HELP_STRING([--enable-mutex-wrap-debug],
+                      [very verbose logging for mutex wrappers @<:@default=no@:>@]),
+                      [enable_mutex_wrap_debug=$enableval], [enable_mutex_wrap_debug=no])
+    if test "x$enable_mutex_wrap_debug" = "xyes" ; then
+        enable_mutex_wrap_debug=1
+        mutex_wrap_status="$mutex_wrap_status +debug"
+    else
+        enable_mutex_wrap_debug=0
+    fi
+    AC_ARG_ENABLE([mutex-wrap-deadlock-check],
+       AC_HELP_STRING([--disable-mutex-wrap-deadlock-check],
+                      [check for same-thread deadlocks @<:@default=yes if wrapped@:>@]),
+                      [enable_mutex_wrap_deadlock_check=$enableval],
+                      [enable_mutex_wrap_deadlock_check=yes])
+    if test "x$enable_mutex_wrap_deadlock_check" = "xyes" ; then
+        enable_mutex_wrap_deadlock_check=1
+        mutex_wrap_status="$mutex_wrap_status +deadlock-check"
+    else
+        enable_mutex_wrap_deadlock_check=0
+    fi
+    AC_ARG_ENABLE([mutex-wrap-owner-check],
+       AC_HELP_STRING([--enable-mutex-wrap-owner-check],
+                      [check mutex owner before unlocking @<:@default=no@:>@]),
+                      [enable_mutex_wrap_owner_check=$enableval],
+                      [enable_mutex_wrap_owner_check=no])
+    if test "x$enable_mutex_wrap_owner_check" = "xyes" ; then
+        enable_mutex_wrap_owner_check=1
+        mutex_wrap_status="$mutex_wrap_status +owner-check"
+    else
+        enable_mutex_wrap_owner_check=0
+    fi
+    AC_ARG_ENABLE([mutex-wrap-wait-check],
+       AC_HELP_STRING([--disable-mutex-wrap-wait-check],
+                      [check owner before waiting on mutex @<:@default=yes if wrapped@:>@]),
+                      [enable_mutex_wrap_wait_check=$enableval], [enable_mutex_wrap_wait_check=yes])
+    if test "x$enable_mutex_wrap_wait_check" = "xyes" ; then
+        enable_mutex_wrap_wait_check=1
+        mutex_wrap_status="$mutex_wrap_status +wait-check"
+    else
+        enable_mutex_wrap_wait_check=0
+    fi
+    AC_MSG_RESULT([$mutex_wrap_status])
+    LDFLAGS_mutex_save="$LDFLAGS"
+    LDFLAGS="$LDFLAGS -rdynamic"
+    AC_MSG_CHECKING([if linker supports -rdynamic])
+    AC_TRY_LINK([], [return 0;], [AC_MSG_RESULT(yes)], [
+        LDFLAGS="$LDFLAGS_mutex_save"
+        AC_MSG_RESULT(no)
+    ])
+else
+    AC_MSG_RESULT([no])
+    enable_mutex_wrap_debug=0
+    enable_mutex_wrap_deadlock_check=0
+    enable_mutex_wrap_owner_check=0
+    enable_mutex_wrap_wait_check=0
+fi
+AC_DEFINE_UNQUOTED([TRQ_MUTEX_LOG_DEBUG], [$enable_mutex_wrap_debug], [Define for verbose logging of mutex wrappers])
+AC_DEFINE_UNQUOTED([TRQ_MUTEX_DEADLOCK_CHECK], [$enable_mutex_wrap_deadlock_check], [Define to check for same-thread deadlocks])
+AC_DEFINE_UNQUOTED([TRQ_MUTEX_OWNER_CHECK], [$enable_mutex_wrap_owner_check], [Define to check mutex owner before unlocking])
+AC_DEFINE_UNQUOTED([TRQ_MUTEX_WAIT_OWNER_CHECK], [$enable_mutex_wrap_wait_check], [Define to check mutex owner before waiting])
+
+
+dnl
+dnl  ######################################################################
 dnl  Output
 dnl
 

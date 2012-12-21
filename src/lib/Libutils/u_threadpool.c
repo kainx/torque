@@ -82,6 +82,7 @@
 #include <signal.h>
 #include <time.h>
 #include <unistd.h>
+#include "trq_mutex.h"
 #include "threadpool.h"
 #include "utils.h"
 #include "log.h"

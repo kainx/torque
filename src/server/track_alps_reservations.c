@@ -82,6 +82,7 @@
 #include <pthread.h>
 #include <errno.h>
 
+#include "trq_mutex.h"
 #include "track_alps_reservations.h"
 #include "utils.h"
 #include "batch_request.h"

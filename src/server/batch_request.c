@@ -80,6 +80,7 @@
 #include <stdio.h>
 #include <string.h>
 
+#include "trq_mutex.h"
 #include "batch_request.h"
 #include "utils.h"
 

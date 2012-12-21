@@ -12,7 +12,7 @@ noinst_HEADERS = acct.h array.h assertions.h attribute.h batch_request.h \
 		 qmgr_node_public.h qmgr_node_readonly.h qmgr_que_public.h \
 		 qmgr_que_readonly.h qmgr_svr_public.h qmgr_svr_readonly.h \
 		 queue.h resmon.h resource.h sched_cmds.h server.h \
-		 server_limits.h svrfunc.h tracking.h work_task.h \
+		 server_limits.h svrfunc.h tracking.h trq_mutex.h work_task.h \
 		 port_forwarding.h pbs_cpa.h pbs_cpuset.h  \
 		 pbs_batchreqtype_db.h utils.h u_tree.h threadpool.h \
 		 resizable_array.h hash_table.h mom_hierarchy.h \
