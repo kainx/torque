@@ -78,7 +78,7 @@ else
   AC_DEFINE_UNQUOTED(SVN_VERSION, ["unknown"], [repository svn version])
 fi
 
-
+PKG_PROG_PKG_CONFIG
 
 dnl
 dnl  ######################################################################
