@@ -149,7 +149,7 @@ typedef struct trq_mutex_t_struct {
 
 /* Store stack trace address array into variables provided. */
 #  define trq_mutex_getstack(stack, size) \
-          do { (size) = backtrace((stack), (size)); } while (0)
+          do { (size) = backtrace((stack), TRQ_MUTEX_STACKSIZE); } while (0)
 /* Dump stack trace to syslog from variables provided with given level (l) and leader (s). */
 #  define trq_mutex_showstack(id, stack, size, l, s)                    \
           do {                                                          \
