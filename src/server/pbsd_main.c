@@ -1404,7 +1404,7 @@ void main_loop(void)
     time_now = time(NULL);
 
     monitor_accept_thread();
-    monitor_route_retry_thread();
+    /*monitor_route_retry_thread();*/
 
     if (run_change_logs == TRUE)
       change_logs();

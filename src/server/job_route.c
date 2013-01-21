@@ -547,7 +547,7 @@ void *queue_route(
     pque = find_queuebyname(queue_name);
     if (pque == NULL)
       {
-      sprintf(log_buf, "Could not find queue %s", queue_name);
+      sprintf(log_buf, "Queue %s has disappeared or been deleted.  queue_route() thread exiting.", queue_name);
       log_err(-1, __func__, log_buf);
       free(queue_name);
       pthread_mutex_unlock(reroute_job_mutex);
@@ -575,6 +575,10 @@ void *queue_route(
     pthread_mutex_unlock(reroute_job_mutex);
     sleep(route_retry_interval);
     }
+
+  /* NOTREACHED */
+  sprintf(log_buf, "queue_route(%s) thread terminated impossibly?!", queue_name);
+  log_err(-1, __func__, log_buf);
   free(queue_name);
   return(NULL);
   } /* END queue_route() */

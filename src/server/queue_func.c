@@ -473,17 +473,17 @@ pbs_queue *find_queuebyname(
     pque = svr_queues.ra->slots[i].item;
     }
   
-  if (pque != NULL)
-    lock_queue(pque, __func__, NULL, LOGLEVEL);
-
   unlock_allques_mutex(&svr_queues, __func__, NULL, LOGLEVEL);
   
   if (pque != NULL)
     {
-    if (pque->q_being_recycled != FALSE)
+    if (pque->q_being_recycled)
       {
-      unlock_queue(pque, __func__, "recycled queue", LOGLEVEL);
       pque = NULL;
+      }
+    else
+      {
+      lock_queue(pque, __func__, NULL, LOGLEVEL);
       }
     }
 
@@ -676,7 +676,6 @@ int get_parent_dest_queues(
 
   strcpy(jobid, pjob->ji_qs.ji_jobid);
 
-  *parent = NULL;
   *dest   = NULL;
 
   if ((queue_parent_name != NULL) && (queue_dest_name != NULL))
@@ -700,6 +699,7 @@ int get_parent_dest_queues(
 
   unlock_queue(*parent, __func__, NULL, LOGLEVEL);
 
+  *parent = NULL;
 
   lock_allques_mutex(&svr_queues, __func__, NULL, LOGLEVEL);
 
@@ -724,6 +724,13 @@ int get_parent_dest_queues(
       }
     else
       {
+      if (LOGLEVEL >= 5)
+        {
+        snprintf(log_buf, sizeof(log_buf), "Job %s successfully routed:  %s (%0p, %d) -> %s (%0p, %d)",
+                 jobid, queue_parent_name, pque_parent, index_parent, queue_dest_name, pque_dest,
+                 index_dest);
+        log_event(PBSEVENT_JOB, PBS_EVENTCLASS_JOB, __func__, log_buf);
+        }
       /* SUCCESS! */
       lock_queue(pque_parent, __func__, NULL, LOGLEVEL);
       lock_queue(pque_dest,   __func__, NULL, LOGLEVEL);

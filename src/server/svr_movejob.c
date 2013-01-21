@@ -408,6 +408,7 @@ int local_move(
     job_save(pjob, SAVEJOB_FULL, 0);
     }
 
+  unlock_queue(routing_que, __func__, "job routed and saved", LOGLEVEL);
   return(PBSE_NONE);
   }  /* END local_move() */
 
