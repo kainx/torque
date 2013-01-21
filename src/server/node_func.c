@@ -2877,7 +2877,7 @@ int create_partial_pbs_node(
 
 
 
-
+#if 0  /* UNUSED */
 /*
  * @return a pointer to an initialized node iterator 
  */
@@ -2894,7 +2894,7 @@ node_iterator *get_node_iterator()
 
   return(iter);
   } /* END get_node_iterator() */
-
+#endif
 
 
 
